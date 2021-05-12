@@ -1,0 +1,30 @@
+[package]
+name = "tokio-read-line"
+version = "0.1.0"
+authors = ["shurizzle <shura1991@gmail.com>"]
+
+homepage = "https://github.com/shurizzle/tokio-read-line"
+repository = "https://github.com/shurizzle/tokio-read-line"
+documentation = "https://github.com/shurizzle/tokio-read-line"
+license = "WTFPL"
+keywords = [ "readline" ]
+readme = "README.md"
+description = """
+Read a single line using crossterm compatible with tokio environment
+"""
+categories = [ "command-line-interface" ]
+
+edition = "2018"
+
+exclude = [ "target/*", "Cargo.lock" ]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+crossterm = { version = "0.19", features = ["event-stream"] }
+futures = "0.3"
+unicode-segmentation = "1.7"
+unicode-width = "0.1"
+
+[dev-dependencies]
+tokio = { version = "1.5", features = [ "rt-multi-thread", "macros" ] }
