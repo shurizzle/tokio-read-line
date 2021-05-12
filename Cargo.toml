@@ -27,4 +27,4 @@ unicode-segmentation = "1.7"
 unicode-width = "0.1"
 
 [dev-dependencies]
-tokio = { version = "1.5", features = [ "rt-multi-thread", "macros" ] }
+tokio = { version = "1.5", features = [ "full" ] }
