@@ -13,7 +13,7 @@ use crossterm::{
     event::{Event, EventStream},
     terminal::{disable_raw_mode, enable_raw_mode},
 };
-use futures::Stream;
+use futures::{future::poll_fn, Stream};
 use unicode_segmentation::UnicodeSegmentation;
 
 pub use crossterm::Result;
@@ -30,6 +30,21 @@ impl ReadLines {
             stream: EventStream::new(),
             buffer: String::new(),
         })
+    }
+
+    pub async fn next(&mut self) -> Result<String> {
+        poll_fn(|cx| Pin::new(&mut *self).poll_next(cx)).await
+    }
+
+    pub fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<String>> {
+        let res = Stream::poll_next(self, cx);
+        match res {
+            Poll::Pending => Poll::Pending,
+            Poll::Ready(None) => Poll::Ready(Err(crossterm::ErrorKind::IoError(
+                std::io::ErrorKind::UnexpectedEof.into(),
+            ))),
+            Poll::Ready(Some(res)) => Poll::Ready(res),
+        }
     }
 }
 
